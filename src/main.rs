@@ -99,6 +99,7 @@ impl eframe::App for App {
                 ViewportId::from_hash_of(id),
                 ViewportBuilder::default()
                     .with_position([window.x, window.y])
+                    .with_inner_size([400.0, 300.0])
                     .with_title("Balls"),
                 |ui, _| {
                     ui.vertical_centered(|ui| {
@@ -109,7 +110,7 @@ impl eframe::App for App {
                             }
                             WindowType::Message(msg) => {
                                 ui.label(RichText::new("PLACEHOLDER").size(32.0));
-                                ui.label(RichText::new("TEST").size(32.0));
+                                ui.label(RichText::new(msg).size(32.0));
                             }
                             WindowType::Slowdown => {
                                 ui.label(RichText::new("SLOW").size(32.0));
