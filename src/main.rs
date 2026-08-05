@@ -1,11 +1,12 @@
+mod freakbob;
 mod wintypes;
 
+use crate::wintypes::WindowType;
 use eframe::Frame;
+use eframe::epaint::Direction;
 use egui::{Align, Layout, RichText, Ui, ViewportBuilder, ViewportCommand, ViewportId};
 use std::collections::BTreeMap;
 use std::time::Instant;
-use eframe::epaint::Direction;
-use crate::wintypes::WindowType;
 
 struct WindowData {
     id: u32,
@@ -24,7 +25,15 @@ impl WindowData {
         let y = rand::random_range(0.0..1080.0);
         let dx = rand::random_range(spd_rng.clone());
         let dy = rand::random_range(spd_rng);
-        Self { id, x, y, dx, dy, last_step_time: Instant::now(), win_type: WindowType::from_id(id) }
+        Self {
+            id,
+            x,
+            y,
+            dx,
+            dy,
+            last_step_time: Instant::now(),
+            win_type: WindowType::from_id(id),
+        }
     }
 
     fn step(&mut self) {
@@ -60,7 +69,7 @@ impl App {
         Self {
             id_counter: 0,
             windows: BTreeMap::new(),
-            speed_multiplier: 1.0
+            speed_multiplier: 1.0,
         }
     }
 
@@ -72,8 +81,10 @@ impl App {
 
     fn new_window(&mut self) -> u32 {
         self.id_counter += 1;
-        self.windows
-            .insert(self.id_counter, WindowData::new(self.id_counter, self.get_speed()));
+        self.windows.insert(
+            self.id_counter,
+            WindowData::new(self.id_counter, self.get_speed()),
+        );
         self.id_counter
     }
 
