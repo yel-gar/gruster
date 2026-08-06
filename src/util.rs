@@ -10,6 +10,6 @@ fn simple_hash(num: u64) -> u128 {
     hash
 }
 
-fn secret_hash(v: u64) -> u128 {
+pub fn secret_hash(v: u64) -> u128 {
     simple_hash(v ^ 0x666 + 666)
 }

@@ -13,7 +13,7 @@ fn main() {
         let (n, t) = line.split_once(": ").unwrap();
         let n_parsed = n.parse::<u64>().unwrap();
         let n_hashed = secret_hash(n_parsed);
-        output.push(format!("({n_hashed}, \"{obfuscated}\"),  // {t}\n", obfuscated = obfuscate_to_wd(t.to_string())));
+        output.push(format!("({n_hashed}, \"{obfuscated}\"),  // {t}", obfuscated = obfuscate_to_wd(t.to_string())));
     }
     output.shuffle(&mut (rand::rng()));
     fs::write("entries_wd.txt", output.join("\n")).unwrap();
