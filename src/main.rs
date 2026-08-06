@@ -1,5 +1,6 @@
 mod freakbob;
 mod wintypes;
+mod util;
 
 use crate::wintypes::WindowType;
 use eframe::Frame;
