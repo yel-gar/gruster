@@ -77,7 +77,7 @@ impl App {
         fonts.families.get_mut(&FontFamily::Monospace).unwrap().insert(0, "GREENDINGGASTER".to_owned());
         cc.egui_ctx.set_fonts(fonts);
         Self {
-            id_counter: 35,
+            id_counter: 0,  // TODO: before production MAKE SURE THIS IS ZERO
             windows: BTreeMap::new(),
             speed_multiplier: 1.0,
         }
