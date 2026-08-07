@@ -2,13 +2,11 @@ mod secret;
 mod util;
 mod wintypes;
 
+use crate::util::decrypt_flag;
 use crate::wintypes::WindowType;
-use eframe::epaint::{Direction, FontFamily};
+use eframe::epaint::FontFamily;
 use eframe::{CreationContext, Frame};
-use egui::{
-    Align, FontData, FontDefinitions, Layout, RichText, Ui, ViewportBuilder, ViewportCommand,
-    ViewportId,
-};
+use egui::{FontData, FontDefinitions, RichText, Ui, ViewportBuilder, ViewportCommand, ViewportId};
 use std::collections::BTreeMap;
 use std::sync::Arc;
 use std::time::Instant;
@@ -67,6 +65,7 @@ struct App {
     id_counter: u32,
     windows: BTreeMap<u32, WindowData>,
     speed_multiplier: f32,
+    password: String,
 }
 
 impl App {
@@ -90,9 +89,10 @@ impl App {
             .insert(0, "GREENDINGGASTER".to_owned());
         cc.egui_ctx.set_fonts(fonts);
         Self {
-            id_counter: 0, // TODO: before production MAKE SURE THIS IS ZERO
+            id_counter: 660, // TODO: before production MAKE SURE THIS IS ZERO
             windows: BTreeMap::new(),
             speed_multiplier: 1.0,
+            password: String::new(),
         }
     }
 
@@ -133,7 +133,7 @@ impl eframe::App for App {
             ui.ctx().show_viewport_immediate(
                 ViewportId::from_hash_of(id),
                 ViewportBuilder::default()
-                    .with_position([window.x, window.y])
+                    //.with_position([window.x, window.y])
                     .with_inner_size([400.0, 300.0])
                     .with_title("Balls"),
                 |ui, _| {
@@ -162,10 +162,13 @@ impl eframe::App for App {
                                 }
                             }
                             WindowType::Prompt => {
-                                todo!()
+                                ui.label(RichText::new("PASSWORD").size(32.0));
+                                ui.text_edit_singleline(&mut self.password);
                             }
                             WindowType::Flag => {
-                                todo!()
+                                ui.label(RichText::new("CONGRATULATIONS (OR NOT)").size(16.0));
+                                ui.add_space(50.0);
+                                ui.label(RichText::new(decrypt_flag(&self.password)).size(16.0));
                             }
                         }
                     });

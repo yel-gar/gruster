@@ -36,7 +36,7 @@ impl WindowType {
         match id {
             0 => return WindowType::Root,
             666 => return WindowType::Prompt,
-            667 => return WindowType::Flag,
+            670 => return WindowType::Flag,
             _ => {}
         }
         if ENTRY_NUMBERS.contains(&id) {

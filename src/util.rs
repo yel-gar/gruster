@@ -19,7 +19,7 @@ pub fn secret_hash(v: u64) -> u128 {
     simple_hash(v ^ 0x666 + 666)
 }
 
-pub fn decrypt_flag(password: String) -> String {
+pub fn decrypt_flag(password: &String) -> String {
     let argon = Argon2::default();
     let mut key = [0u8; 32];
     argon
