@@ -14,7 +14,7 @@ fn main() {
         let n_parsed = n.parse::<u64>().unwrap();
         let n_hashed = secret_hash(n_parsed);
         output.push(format!(
-            "({n_hashed}, \"{obfuscated}\"),  // {t}",
+            "({n}, \"{obfuscated}\"),  // {t}",
             obfuscated = obfuscate_to_wd(t.to_string())
         ));
     }

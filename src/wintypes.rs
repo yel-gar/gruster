@@ -1,5 +1,4 @@
 use crate::secret::ENTRIES;
-use crate::util::secret_hash;
 
 type WinLabel = String;
 type BtnLabel = String;
@@ -24,9 +23,9 @@ const ACCEL_NUMBERS: &[u32] = &[37, 665];
 
 const SLOW_NUMBERS: &[u32] = &[480, 664];
 
-fn get_entry(id: u64) -> String {
+fn get_entry(id: u16) -> String {
     ENTRIES
-        .get(&secret_hash(id))
+        .get(&id)
         .unwrap_or(&"help me smth broke")
         .to_string()
 }
@@ -40,9 +39,9 @@ impl WindowType {
             _ => {}
         }
         if ENTRY_NUMBERS.contains(&id) {
-            return WindowType::Message(get_entry(id as u64));
+            return WindowType::Message(get_entry(id as u16));
         } else if ACCEL_NUMBERS.contains(&id) {
-            let lbl = get_entry(id as u64);
+            let lbl = get_entry(id as u16);
             let btn = match id {
                 37 => "",
                 665 => "  ",
@@ -51,7 +50,7 @@ impl WindowType {
             .to_string();
             return WindowType::Accelerate(lbl, btn);
         } else if SLOW_NUMBERS.contains(&id) {
-            let lbl = get_entry(id as u64);
+            let lbl = get_entry(id as u16);
             let btn = match id {
                 480 => "",
                 664 => "  ",
