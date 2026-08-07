@@ -165,7 +165,7 @@ impl App {
 }
 
 impl eframe::App for App {
-    fn logic(&mut self, ctx: &Context, frame: &mut Frame) {
+    fn logic(&mut self, _ctx: &Context, _frame: &mut Frame) {
         if self.old_id_counter == self.id_counter {
             return;
         }
@@ -173,7 +173,7 @@ impl eframe::App for App {
         self.player.set_volume(self.id_counter as f32 / 100.0);
     }
 
-    fn ui(&mut self, ui: &mut Ui, frame: &mut Frame) {
+    fn ui(&mut self, ui: &mut Ui, _frame: &mut Frame) {
         // root
         ui.vertical_centered(|ui| {
             ui.add_space(50.0);
