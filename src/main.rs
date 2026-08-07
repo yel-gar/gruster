@@ -49,6 +49,11 @@ impl WindowData {
     }
 
     fn step(&mut self) {
+        if self.win_type == WindowType::Flag {
+            self.x = 100.0;
+            self.y = 100.0;
+            return;
+        }
         if self.last_step_time.elapsed().as_secs_f32() < 1.0 / 60.0 {
             return;
         }
@@ -90,6 +95,7 @@ struct App {
     windows: BTreeMap<u32, WindowData>,
     speed_multiplier: f32,
     password: String,
+    flag: String,
     sink: MixerDeviceSink,
     player: Player,
 }
@@ -131,6 +137,7 @@ impl App {
             windows: BTreeMap::new(),
             speed_multiplier: 1.0,
             password: String::new(),
+            flag: String::new(),
             player,
             sink,
         }
@@ -238,9 +245,12 @@ impl eframe::App for App {
                                 ui.text_edit_singleline(&mut self.password);
                             }
                             WindowType::Flag => {
+                                if self.flag.is_empty() {
+                                    self.flag = decrypt_flag(&self.password);
+                                }
                                 ui.label(RichText::new("CONGRATULATIONS (OR NOT)").size(16.0));
                                 ui.add_space(50.0);
-                                ui.label(RichText::new(decrypt_flag(&self.password)).size(16.0));
+                                ui.label(RichText::new(self.flag.as_str()).size(16.0));
                             }
                         }
                     });

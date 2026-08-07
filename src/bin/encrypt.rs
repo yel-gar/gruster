@@ -10,7 +10,7 @@ fn main() {
 fn encrypt() {
     let ciphertext = b"letoctf{i_Am_v3R4_VERY_greeN_u3kHd9}";
     let password = b"ru5tgr3engas1er";
-    let salt = b"im_also_a_pirate";
+    let salt = b"salty_waters_pirating";
     let argon = Argon2::default();
 
     let mut key = [0u8; 32];
