@@ -3,15 +3,18 @@ mod secret;
 mod util;
 mod wintypes;
 
-use crate::resources::MYSTERY_MAN_PNG;
+use crate::resources::{MUSIC, MYSTERY_MAN_PNG};
 use crate::util::{color_from_lerp_f, decrypt_flag};
 use crate::wintypes::WindowType;
 use eframe::epaint::FontFamily;
 use eframe::{CreationContext, Frame};
 use egui::{
-    FontData, FontDefinitions, Image, RichText, Ui, ViewportBuilder, ViewportCommand, ViewportId,
+    Context, FontData, FontDefinitions, Image, RichText, Ui, ViewportBuilder, ViewportCommand,
+    ViewportId,
 };
+use rodio::{Decoder, DeviceSinkBuilder, MixerDeviceSink, Player, Source};
 use std::collections::BTreeMap;
+use std::io::Cursor;
 use std::sync::Arc;
 use std::time::Instant;
 
@@ -66,10 +69,13 @@ impl WindowData {
 }
 
 struct App {
+    old_id_counter: u32,
     id_counter: u32,
     windows: BTreeMap<u32, WindowData>,
     speed_multiplier: f32,
     password: String,
+    sink: MixerDeviceSink,
+    player: Player,
 }
 
 impl App {
@@ -94,11 +100,23 @@ impl App {
         cc.egui_ctx.set_fonts(fonts);
 
         egui_extras::install_image_loaders(&cc.egui_ctx);
+
+        let sink = DeviceSinkBuilder::open_default_sink().expect("Failed to open audio device");
+        let player = Player::connect_new(&sink.mixer());
+        let source = Decoder::new_mp3(Cursor::new(MUSIC))
+            .expect("Failed to load audio source")
+            .repeat_infinite();
+        player.append(source);
+        player.set_volume(0.0);
+
         Self {
-            id_counter: 600, // TODO: before production MAKE SURE THIS IS ZERO
+            old_id_counter: 0,
+            id_counter: 0, // TODO: before production MAKE SURE THIS IS ZERO
             windows: BTreeMap::new(),
             speed_multiplier: 1.0,
             password: String::new(),
+            player,
+            sink,
         }
     }
 
@@ -123,6 +141,14 @@ impl App {
 }
 
 impl eframe::App for App {
+    fn logic(&mut self, ctx: &Context, frame: &mut Frame) {
+        if self.old_id_counter == self.id_counter {
+            return;
+        }
+        self.old_id_counter = self.id_counter;
+        self.player.set_volume(self.id_counter as f32 / 100.0);
+    }
+
     fn ui(&mut self, ui: &mut Ui, frame: &mut Frame) {
         // root
         ui.vertical_centered(|ui| {
