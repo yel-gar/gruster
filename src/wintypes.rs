@@ -4,7 +4,7 @@ use crate::util::secret_hash;
 type WinLabel = String;
 type BtnLabel = String;
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 pub enum WindowType {
     Root,
     Normal,

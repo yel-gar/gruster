@@ -3,7 +3,7 @@ mod secret;
 mod util;
 mod wintypes;
 
-use crate::resources::{MUSIC, MYSTERY_MAN_PNG};
+use crate::resources::{MUSIC, MYSTERY_MAN_PNG, TALK};
 use crate::util::{color_from_lerp_f, decrypt_flag};
 use crate::wintypes::WindowType;
 use eframe::epaint::FontFamily;
@@ -16,7 +16,7 @@ use rodio::{Decoder, DeviceSinkBuilder, MixerDeviceSink, Player, Source};
 use std::collections::BTreeMap;
 use std::io::Cursor;
 use std::sync::Arc;
-use std::time::Instant;
+use std::time::{Duration, Instant};
 
 struct WindowData {
     id: u32,
@@ -25,6 +25,7 @@ struct WindowData {
     dx: f32,
     dy: f32,
     last_step_time: Instant,
+    initialized_at: Instant,
     win_type: WindowType,
 }
 
@@ -42,6 +43,7 @@ impl WindowData {
             dx,
             dy,
             last_step_time: Instant::now(),
+            initialized_at: Instant::now(),
             win_type: WindowType::from_id(id),
         }
     }
@@ -65,6 +67,20 @@ impl WindowData {
             self.dy = self.dy.abs();
         }
         self.last_step_time = Instant::now();
+    }
+
+    fn current_text(&self) -> String {
+        match &self.win_type {
+            WindowType::Message(s) | WindowType::Accelerate(s, _) | WindowType::Slowdown(s, _) => {
+                let progress = (self.initialized_at.elapsed().as_secs_f32() / 2.0).min(1.0);
+                if progress >= 1.0 {
+                    return s.clone();
+                }
+                let take_below = (s.chars().count() as f32 * progress).floor() as usize;
+                s.chars().take(take_below).collect::<String>()
+            }
+            _ => "".to_string(),
+        }
     }
 }
 
@@ -128,10 +144,18 @@ impl App {
 
     fn new_window(&mut self) -> u32 {
         self.id_counter += 1;
-        self.windows.insert(
-            self.id_counter,
-            WindowData::new(self.id_counter, self.get_speed()),
-        );
+        let window = WindowData::new(self.id_counter, self.get_speed());
+        let win_type = window.win_type.clone();
+        self.windows.insert(self.id_counter, window);
+
+        if win_type != WindowType::Normal {
+            let mut decoder =
+                Decoder::new_mp3(Cursor::new(TALK)).expect("Failed to load audio source");
+            let _ = decoder.try_seek(Duration::from_secs_f32(rand::random_range(0.0..1.9)));
+            self.sink
+                .mixer()
+                .add(decoder.take_duration(Duration::from_secs(2)))
+        }
         self.id_counter
     }
 
@@ -174,6 +198,7 @@ impl eframe::App for App {
                 ViewportBuilder::default()
                     .with_position([window.x, window.y])
                     .with_inner_size([400.0, 300.0])
+                    .with_resizable(false)
                     .with_title("???"),
                 |ui, _| {
                     ui.vertical_centered(|ui| {
@@ -186,19 +211,23 @@ impl eframe::App for App {
                                         .tint(color_from_lerp_f((*id as f32 / 666.0).min(1.0))),
                                 );
                             }
-                            WindowType::Message(msg) => {
-                                ui.label(RichText::new("PLACEHOLDER").size(32.0));
-                                ui.label(RichText::new(msg).size(32.0));
+                            WindowType::Message(_) => {
+                                ui.label(RichText::new(window.current_text()).size(25.0));
+                                ui.add(
+                                    Image::new(MYSTERY_MAN_PNG)
+                                        .max_height(160.0)
+                                        .tint(color_from_lerp_f((*id as f32 / 666.0).min(1.0))),
+                                );
                             }
-                            WindowType::Slowdown(lbl, btn) => {
-                                ui.label(RichText::new(lbl).size(32.0));
+                            WindowType::Slowdown(_, btn) => {
+                                ui.label(RichText::new(window.current_text()).size(28.0));
                                 if ui.button(RichText::new(btn).size(32.0)).clicked() {
                                     self.speed_multiplier *= 0.5;
                                     ui.ctx().send_viewport_cmd(ViewportCommand::Close);
                                 }
                             }
-                            WindowType::Accelerate(lbl, btn) => {
-                                ui.label(RichText::new(lbl).size(32.0));
+                            WindowType::Accelerate(_, btn) => {
+                                ui.label(RichText::new(window.current_text()).size(28.0));
                                 if ui.button(RichText::new(btn).size(32.0)).clicked() {
                                     self.speed_multiplier *= 2.0;
                                     ui.ctx().send_viewport_cmd(ViewportCommand::Close);
@@ -233,7 +262,9 @@ impl eframe::App for App {
 
 fn main() -> Result<(), eframe::Error> {
     let opts = eframe::NativeOptions {
-        viewport: ViewportBuilder::default().with_inner_size([400.0, 300.0]),
+        viewport: ViewportBuilder::default()
+            .with_inner_size([400.0, 300.0])
+            .with_resizable(false),
         ..Default::default()
     };
     eframe::run_native("???", opts, Box::new(|cc| Ok(Box::new(App::new(cc)))))?;
