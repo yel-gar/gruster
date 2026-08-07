@@ -1,12 +1,16 @@
+mod resources;
 mod secret;
 mod util;
 mod wintypes;
 
-use crate::util::decrypt_flag;
+use crate::resources::MYSTERY_MAN_PNG;
+use crate::util::{color_from_lerp_f, decrypt_flag};
 use crate::wintypes::WindowType;
 use eframe::epaint::FontFamily;
 use eframe::{CreationContext, Frame};
-use egui::{FontData, FontDefinitions, RichText, Ui, ViewportBuilder, ViewportCommand, ViewportId};
+use egui::{
+    FontData, FontDefinitions, Image, RichText, Ui, ViewportBuilder, ViewportCommand, ViewportId,
+};
 use std::collections::BTreeMap;
 use std::sync::Arc;
 use std::time::Instant;
@@ -45,13 +49,13 @@ impl WindowData {
         }
         self.x += self.dx;
         self.y += self.dy;
-        if self.x > 1600.0 {
+        if self.x > 1500.0 {
             self.dx = -self.dx.abs();
         }
         if self.x < 0.0 {
             self.dx = self.dx.abs();
         }
-        if self.y > 800.0 {
+        if self.y > 700.0 {
             self.dy = -self.dy.abs();
         }
         if self.y < 0.0 {
@@ -88,8 +92,10 @@ impl App {
             .unwrap()
             .insert(0, "GREENDINGGASTER".to_owned());
         cc.egui_ctx.set_fonts(fonts);
+
+        egui_extras::install_image_loaders(&cc.egui_ctx);
         Self {
-            id_counter: 660, // TODO: before production MAKE SURE THIS IS ZERO
+            id_counter: 600, // TODO: before production MAKE SURE THIS IS ZERO
             windows: BTreeMap::new(),
             speed_multiplier: 1.0,
             password: String::new(),
@@ -119,7 +125,14 @@ impl App {
 impl eframe::App for App {
     fn ui(&mut self, ui: &mut Ui, frame: &mut Frame) {
         // root
-        ui.label(RichText::new("hello").size(32.0));
+        ui.vertical_centered(|ui| {
+            ui.add_space(50.0);
+            ui.add(
+                Image::new(MYSTERY_MAN_PNG)
+                    .max_height(160.0)
+                    .tint(color_from_lerp_f((self.id_counter as f32 / 666.0).min(1.0))),
+            );
+        });
         if ui.ctx().input(|i| i.viewport().close_requested()) {
             self.mitosis(0);
             ui.ctx().send_viewport_cmd(ViewportCommand::CancelClose);
@@ -133,15 +146,19 @@ impl eframe::App for App {
             ui.ctx().show_viewport_immediate(
                 ViewportId::from_hash_of(id),
                 ViewportBuilder::default()
-                    //.with_position([window.x, window.y])
+                    .with_position([window.x, window.y])
                     .with_inner_size([400.0, 300.0])
-                    .with_title("Balls"),
+                    .with_title("???"),
                 |ui, _| {
                     ui.vertical_centered(|ui| {
                         ui.add_space(50.0);
                         match window.win_type.clone() {
                             WindowType::Root | WindowType::Normal => {
-                                ui.label(RichText::new("PLACEHOLDER").size(32.0));
+                                ui.add(
+                                    Image::new(MYSTERY_MAN_PNG)
+                                        .max_height(160.0)
+                                        .tint(color_from_lerp_f((*id as f32 / 666.0).min(1.0))),
+                                );
                             }
                             WindowType::Message(msg) => {
                                 ui.label(RichText::new("PLACEHOLDER").size(32.0));
@@ -189,10 +206,10 @@ impl eframe::App for App {
 }
 
 fn main() -> Result<(), eframe::Error> {
-    eframe::run_native(
-        "Very good appp",
-        eframe::NativeOptions::default(),
-        Box::new(|cc| Ok(Box::new(App::new(cc)))),
-    )?;
+    let opts = eframe::NativeOptions {
+        viewport: ViewportBuilder::default().with_inner_size([400.0, 300.0]),
+        ..Default::default()
+    };
+    eframe::run_native("???", opts, Box::new(|cc| Ok(Box::new(App::new(cc)))))?;
     Ok(())
 }

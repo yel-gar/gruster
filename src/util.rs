@@ -2,6 +2,7 @@ use crate::secret::{FLAG_ARGON_NONCE, FLAG_ARGON_SALT, FLAG_PAYLOAD};
 use aes_gcm::aead::Aead;
 use aes_gcm::{Aes256Gcm, Key, KeyInit, Nonce};
 use argon2::Argon2;
+use egui::Color32;
 
 fn simple_hash(num: u64) -> u128 {
     const FNV_PRIME: u128 = 1000000000000066600000000000001;
@@ -33,4 +34,13 @@ pub fn decrypt_flag(password: &String) -> String {
         .unwrap_or(b"letoctf{you_have_failed}".to_vec());
 
     decrypted.iter().map(|&b| b as char).collect()
+}
+
+pub fn color_from_lerp_f(lerp_f: f32) -> Color32 {
+    Color32::from_rgba_unmultiplied(
+        (255.0 * (1.0 - lerp_f)) as u8,
+        255,
+        (255.0 * (1.0 - lerp_f)) as u8,
+        255,
+    )
 }
