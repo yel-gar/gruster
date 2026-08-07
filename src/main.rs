@@ -1,11 +1,14 @@
-mod freakbob;
-mod wintypes;
+mod secret;
 mod util;
+mod wintypes;
 
 use crate::wintypes::WindowType;
-use eframe::{CreationContext, Frame};
 use eframe::epaint::{Direction, FontFamily};
-use egui::{Align, FontData, FontDefinitions, Layout, RichText, Ui, ViewportBuilder, ViewportCommand, ViewportId};
+use eframe::{CreationContext, Frame};
+use egui::{
+    Align, FontData, FontDefinitions, Layout, RichText, Ui, ViewportBuilder, ViewportCommand,
+    ViewportId,
+};
 use std::collections::BTreeMap;
 use std::sync::Arc;
 use std::time::Instant;
@@ -71,13 +74,23 @@ impl App {
         let mut fonts = FontDefinitions::default();
         fonts.font_data.insert(
             "GREENDINGGASTER".to_owned(),
-            Arc::new(FontData::from_static(include_bytes!("C:/Windows/Fonts/wingding.ttf")))
+            Arc::new(FontData::from_static(include_bytes!(
+                "C:/Windows/Fonts/wingding.ttf"
+            ))),
         );
-        fonts.families.get_mut(&FontFamily::Proportional).unwrap().insert(0, "GREENDINGGASTER".to_owned());
-        fonts.families.get_mut(&FontFamily::Monospace).unwrap().insert(0, "GREENDINGGASTER".to_owned());
+        fonts
+            .families
+            .get_mut(&FontFamily::Proportional)
+            .unwrap()
+            .insert(0, "GREENDINGGASTER".to_owned());
+        fonts
+            .families
+            .get_mut(&FontFamily::Monospace)
+            .unwrap()
+            .insert(0, "GREENDINGGASTER".to_owned());
         cc.egui_ctx.set_fonts(fonts);
         Self {
-            id_counter: 0,  // TODO: before production MAKE SURE THIS IS ZERO
+            id_counter: 0, // TODO: before production MAKE SURE THIS IS ZERO
             windows: BTreeMap::new(),
             speed_multiplier: 1.0,
         }
@@ -110,6 +123,7 @@ impl eframe::App for App {
         if ui.ctx().input(|i| i.viewport().close_requested()) {
             self.mitosis(0);
             ui.ctx().send_viewport_cmd(ViewportCommand::CancelClose);
+            ui.ctx().send_viewport_cmd(ViewportCommand::Minimized(true));
         }
 
         // clones
@@ -146,6 +160,12 @@ impl eframe::App for App {
                                     self.speed_multiplier *= 2.0;
                                     ui.ctx().send_viewport_cmd(ViewportCommand::Close);
                                 }
+                            }
+                            WindowType::Prompt => {
+                                todo!()
+                            }
+                            WindowType::Flag => {
+                                todo!()
                             }
                         }
                     });

@@ -1,7 +1,7 @@
-use std::fs;
-use std::hash::{DefaultHasher, Hash, Hasher};
-use std::io::Write;
 use rand::prelude::*;
+use std::fs;
+use std::hash::Hasher;
+use std::io::Write;
 
 const WD_OFFSET: i32 = 0xF000;
 const EG_OFFSET: i32 = 0x13000;
@@ -13,7 +13,10 @@ fn main() {
         let (n, t) = line.split_once(": ").unwrap();
         let n_parsed = n.parse::<u64>().unwrap();
         let n_hashed = secret_hash(n_parsed);
-        output.push(format!("({n_hashed}, \"{obfuscated}\"),  // {t}", obfuscated = obfuscate_to_wd(t.to_string())));
+        output.push(format!(
+            "({n_hashed}, \"{obfuscated}\"),  // {t}",
+            obfuscated = obfuscate_to_wd(t.to_string())
+        ));
     }
     output.shuffle(&mut (rand::rng()));
     fs::write("entries_wd.txt", output.join("\n")).unwrap();
