@@ -32,8 +32,8 @@ struct WindowData {
 impl WindowData {
     fn new(id: u32, speed_range: f32) -> Self {
         let spd_rng = -speed_range..speed_range;
-        let x = rand::random_range(0.0..1600.0);
-        let y = rand::random_range(0.0..800.0);
+        let x = rand::random_range(0.0..1500.0);
+        let y = rand::random_range(0.0..700.0);
         let dx = rand::random_range(spd_rng.clone());
         let dy = rand::random_range(spd_rng);
         Self {

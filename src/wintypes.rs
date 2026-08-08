@@ -1,4 +1,6 @@
 use crate::secret::ENTRIES;
+use std::collections::HashMap;
+use std::sync::LazyLock;
 
 type WinLabel = String;
 type BtnLabel = String;
@@ -23,8 +25,11 @@ const ACCEL_NUMBERS: &[u32] = &[37, 665];
 
 const SLOW_NUMBERS: &[u32] = &[480, 664];
 
+static ENTRY_MAP: LazyLock<HashMap<u16, &str>> =
+    LazyLock::new(|| HashMap::from_iter(ENTRIES.iter().cloned()));
+
 fn get_entry(id: u16) -> String {
-    ENTRIES
+    ENTRY_MAP
         .get(&id)
         .unwrap_or(&"help me smth broke")
         .to_string()
