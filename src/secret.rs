@@ -1,43 +1,46 @@
-pub const ENTRIES: [(u16, &str); 36] = [
-    (44, ""),                // I SEEM TO SLOWLY GET
-    (309, ""),                               // 7UST
-    (665, ""),                           // PICK ONE
-    (300, ""),                    // T0CH1ng_PEopl3}
-    (477, ""),    // THIS EXPERIMENT IS TOO ANNOYING
-    (567, ""),                             // KNIGHT
-    (270, ""),                    // LETOCTF{I_L1Ke_
-    (658, ""),     // RIGHT BUTTON: SYSTEM32 DELETED
-    (222, ""),                              // APPLE
-    (24, ""), // THIS PROGRAM COULD USE AN EYE-PATCH
-    (165, ""),                       // SECRET: RU5T
-    (381, ""),                         // EXP3RIM9NT
-    (31, ""),                      // SECRET: G5STER
-    (367, ""),       // I GENUINELY HATE THIS NUMBER
-    (17, ""), // 165 482 30. NO SPACE. ALL SMALL. ALL GREEN.
-    (478, ""),                       // YOUR TAKING TOO LONG
-    (14, ""),                              // I USE ARCH BTW
-    (30, ""),                                      // GAS1ER
-    (652, ""), // NOW. LET US PLAY THE GAME. YOU LOST IT BY THE WAY.
-    (482, ""),                                              // GR3EN
-    (67, ""),                              // HOW VERY, VERY, CRINGE
-    (120, ""),                                      // G5EEN_AppLeZ}
-    (540, ""), // YOU CAN ONLY GET THROUGH BY CHEATING
+pub const ENTRIES: [(u16, &str); 39] = [
+    (477, ""), // THIS EXPERIMENT IS TOO ANNOYING
+    (482, ""),                           // GR3EN
     (
         650,
         "",
     ), // FINALLY. THIS EXPERIMENT HAS BEEN VERY, VERY, ENTERTAINING
-    (510, ""),                                 // KR1S
-    (480, ""),          // SLOW DOWN IF YOU'RE A CLOWN
-    (660, ""),            // LEFT BUTTON: YOU CAN TYPE
-    (6, ""), // YOU SHOULD NOT HAVE RUN RANDOM EXE FROM THE INTERNET
-    (520, ""),                                              // ISTH3
-    (162, ""),                                     // SECRET: KN1GH5
-    (37, ""), // PRESS THIS BUTTON IF YOU LIKE CHEATING
-    (599, ""),                                 // GR33N
-    (664, ""),                              // PICK ONE
-    (234, ""),                             // UND3RTALE
+    (478, ""),            // YOUR TAKING TOO LONG
+    (165, ""),                    // SECRET: RU5T
+    (30, ""),                           // GAS1ER
+    (658, ""),  // RIGHT BUTTON: SYSTEM32 DELETED
+    (510, ""),                            // KR1S
+    (120, ""),                   // G5EEN_AppLeZ}
+    (652, ""), // NOW. LET US PLAY THE GAME. YOU LOST IT BY THE WAY.
+    (14, ""),                                      // I USE ARCH BTW
+    (67, ""),                              // HOW VERY, VERY, CRINGE
+    (630, ""),                            // HAVE YOU EVER FELT LIKE
     (8, ""), // YOUR COMPUTER IS NOW INFESTED WITH F R I E N D S
-    (46, ""),                            // GREENER, YET GREENER
+    (24, ""),             // THIS PROGRAM COULD USE AN EYE-PATCH
+    (520, ""),                                          // ISTH3
+    (234, ""),                                      // UND3RTALE
+    (17, ""), // 165 482 30. NO SPACE. ALL SMALL. ALL GREEN.
+    (664, ""),                                   // PICK ONE
+    (44, ""),                        // I SEEM TO SLOWLY GET
+    (300, ""),                            // T0CH1ng_PEopl3}
+    (10, ""),                    // DONT THINK YOU CAN CHEAT
+    (37, ""),      // PRESS THIS BUTTON IF YOU LIKE CHEATING
+    (660, ""),                  // LEFT BUTTON: YOU CAN TYPE
+    (162, ""),                             // SECRET: KN1GH5
+    (222, ""),                                      // APPLE
+    (665, ""),                                   // PICK ONE
+    (480, ""),                // SLOW DOWN IF YOU'RE A CLOWN
+    (540, ""),       // YOU CAN ONLY GET THROUGH BY CHEATING
+    (6, ""), // YOU SHOULD NOT HAVE RUN RANDOM EXE FROM THE INTERNET
+    (567, ""),                                             // KNIGHT
+    (309, ""),                                               // 7UST
+    (367, ""),                       // I GENUINELY HATE THIS NUMBER
+    (599, ""),                                              // GR33N
+    (46, ""),                                // GREENER, YET GREENER
+    (270, ""),                                    // LETOCTF{I_L1Ke_
+    (31, ""),                                      // SECRET: G5STER
+    (381, ""),                                         // EXP3RIM9NT
+    (634, ""),                       // YOUR MEMORY HAS BEEN PATCHED
 ];
 
 pub const FLAG_ARGON_SALT: &[u8; 21] = b"salty_waters_pirating";
