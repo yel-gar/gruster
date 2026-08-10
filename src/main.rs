@@ -1,3 +1,4 @@
+#![windows_subsystem = "windows"]
 mod resources;
 mod secret;
 mod util;
