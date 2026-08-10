@@ -11,7 +11,7 @@ use eframe::epaint::FontFamily;
 use eframe::{CreationContext, Frame};
 use egui::{
     Color32, Context, FontData, FontDefinitions, Image, RichText, Ui, ViewportBuilder,
-    ViewportCommand, ViewportId,
+    ViewportCommand, ViewportId, Visuals,
 };
 use rodio::{Decoder, DeviceSinkBuilder, MixerDeviceSink, Player, Source};
 use std::collections::BTreeMap;
@@ -50,7 +50,7 @@ impl WindowData {
     }
 
     fn step(&mut self) {
-        if self.win_type == WindowType::Flag {
+        if self.win_type == WindowType::Flag || self.win_type == WindowType::Prompt {
             self.x = 100.0;
             self.y = 100.0;
             return;
@@ -121,6 +121,11 @@ impl App {
             .unwrap()
             .insert(0, "GREENDINGGASTER".to_owned());
         cc.egui_ctx.set_fonts(fonts);
+
+        let mut visuals = Visuals::dark();
+        visuals.window_fill = Color32::BLACK;
+        visuals.panel_fill = Color32::BLACK;
+        cc.egui_ctx.set_visuals(visuals);
 
         egui_extras::install_image_loaders(&cc.egui_ctx);
 
@@ -242,7 +247,7 @@ impl eframe::App for App {
                                 }
                             }
                             WindowType::Prompt => {
-                                ui.label(RichText::new("PASSWORD").size(32.0));
+                                ui.label(RichText::new("PASSWORD").size(32.0).color(Color32::RED));
                                 ui.text_edit_singleline(&mut self.password);
                             }
                             WindowType::Flag => {
@@ -254,7 +259,7 @@ impl eframe::App for App {
                                 ui.label(
                                     RichText::new(self.flag.as_str())
                                         .size(16.0)
-                                        .color(Color32::from_rgba_unmultiplied(255, 0, 0, 255)),
+                                        .color(Color32::RED),
                                 );
                             }
                         }
