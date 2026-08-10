@@ -10,8 +10,8 @@ use crate::wintypes::WindowType;
 use eframe::epaint::FontFamily;
 use eframe::{CreationContext, Frame};
 use egui::{
-    Context, FontData, FontDefinitions, Image, RichText, Ui, ViewportBuilder, ViewportCommand,
-    ViewportId,
+    Color32, Context, FontData, FontDefinitions, Image, RichText, Ui, ViewportBuilder,
+    ViewportCommand, ViewportId,
 };
 use rodio::{Decoder, DeviceSinkBuilder, MixerDeviceSink, Player, Source};
 use std::collections::BTreeMap;
@@ -251,7 +251,11 @@ impl eframe::App for App {
                                 }
                                 ui.label(RichText::new("CONGRATULATIONS (OR NOT)").size(16.0));
                                 ui.add_space(50.0);
-                                ui.label(RichText::new(self.flag.as_str()).size(16.0));
+                                ui.label(
+                                    RichText::new(self.flag.as_str())
+                                        .size(16.0)
+                                        .color(Color32::from_rgba_unmultiplied(255, 0, 0, 255)),
+                                );
                             }
                         }
                     });

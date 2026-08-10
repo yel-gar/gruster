@@ -1,4 +1,4 @@
-pub const ENTRIES: [(u16, &str); 39] = [
+pub const ENTRIES: [(u16, &str); 40] = [
     (477, ""), // THIS EXPERIMENT IS TOO ANNOYING
     (482, ""),                           // GR3EN
     (
@@ -41,6 +41,7 @@ pub const ENTRIES: [(u16, &str); 39] = [
     (31, ""),                                      // SECRET: G5STER
     (381, ""),                                         // EXP3RIM9NT
     (634, ""),                       // YOUR MEMORY HAS BEEN PATCHED
+    (9000, "CONGRATS, YOU FOUND THE EGG"),
 ];
 
 pub const FLAG_ARGON_SALT: &[u8; 21] = b"salty_waters_pirating";
